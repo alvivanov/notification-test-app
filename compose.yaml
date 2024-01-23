@@ -2,7 +2,7 @@ version: '3.9'
 services:
   server:
     image: nginx:1.25-alpine
-    container_name: loyalty_server
+    container_name: test_server
     environment:
       NGINX_PORT: 80
       NGINX_ROOT: /var/www/default/web
@@ -25,19 +25,8 @@ services:
       POSTGRES_USER: '${DB_USERNAME}'
     networks:
       - local
-    restart: on-failure
     ports:
       - '${DB_EXTERNAL_PORT}:5432'
-  test_db:
-    image: postgres:15-alpine
-    container_name: test_db_test
-    environment:
-      POSTGRES_PASSWORD: test
-      POSTGRES_DB: test
-      POSTGRES_USER: test
-    networks:
-      - local
-    restart: on-failure
   app:
     build:
       context: .
