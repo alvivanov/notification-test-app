@@ -7,8 +7,15 @@
 # RUN `build` COMMAND AFTER ADDING/REMOVING MODULES.
 #basic/web/index.php
 actor: FunctionalTester
+params:
+  - .env.test
 modules:
     enabled:
-      - Filesystem
-      - Yii2
+      - Yii2:
+          transaction: false
       - Asserts
+      - REST:
+          url: http://server:81/
+          depends: PhpBrowser
+          part: Json
+      - Cli

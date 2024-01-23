@@ -1,6 +1,10 @@
 <?php
+
+use app\components\ErrorHandler;
+
 $params = require __DIR__ . '/params.php';
-$db = require __DIR__ . '/test_db.php';
+$db     = require __DIR__ . '/test_db.php';
+$di     = require __DIR__ . '/di.php';
 
 /**
  * Application configuration shared by all test types
@@ -25,22 +29,23 @@ return [
         'assetManager' => [
             'basePath' => __DIR__ . '/../web/assets',
         ],
-        'urlManager' => [
-            'showScriptName' => true,
+        'errorHandler' => [
+            'class' => ErrorHandler::class,
         ],
-        'user' => [
-            'identityClass' => 'app\models\User',
+        'urlManager'   => [
+            'enablePrettyUrl' => true,
+            'showScriptName'  => false,
+            'rules'           => [
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'notifications'],
+            ],
         ],
         'request' => [
             'cookieValidationKey' => 'test',
             'enableCsrfValidation' => false,
-            // but if you absolutely need it set cookie domain to localhost
-            /*
-            'csrfCookie' => [
-                'domain' => 'localhost',
-            ],
-            */
         ],
     ],
     'params' => $params,
+    'container'  => [
+        'definitions' => $di,
+    ],
 ];

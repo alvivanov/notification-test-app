@@ -1,73 +1,78 @@
 <?php
 
+use app\components\ErrorHandler;
+use yii\base\Event;
+
 $params = require __DIR__ . '/params.php';
-$db = require __DIR__ . '/db.php';
+$db     = require __DIR__ . '/db.php';
+$di     = require __DIR__ . '/di.php';
 
 $config = [
-    'id' => 'basic',
-    'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
-    'aliases' => [
+    'id'         => 'basic',
+    'basePath'   => dirname(__DIR__),
+    'bootstrap'  => ['log'],
+    'aliases'    => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
     'components' => [
-        'request' => [
+        'request'      => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'wjOslpmpe12YG6eDGcTrDiNgDKCwAJS6',
+            'parsers'             => [
+                'application/json' => 'yii\web\JsonParser',
+            ],
         ],
-        'cache' => [
+        'cache'        => [
             'class' => 'yii\caching\FileCache',
         ],
-        'user' => [
-            'identityClass' => 'app\models\User',
-            'enableAutoLogin' => true,
-        ],
         'errorHandler' => [
-            'errorAction' => 'site/error',
+            'class' => ErrorHandler::class,
         ],
-        'mailer' => [
-            'class' => \yii\symfonymailer\Mailer::class,
-            'viewPath' => '@app/mail',
+        'mailer'       => [
+            'class'            => \yii\symfonymailer\Mailer::class,
+            'viewPath'         => '@app/mail',
             // send all mails to a file by default.
             'useFileTransport' => true,
         ],
-        'log' => [
+        'log'          => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
-            'targets' => [
+            'targets'    => [
                 [
-                    'class' => 'yii\log\FileTarget',
+                    'class'  => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
                 ],
             ],
         ],
-        'db' => $db,
-        /*
-        'urlManager' => [
+        'db'           => $db,
+        'urlManager'   => [
             'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'rules' => [
+            'showScriptName'  => false,
+            'rules'           => [
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'notifications'],
             ],
         ],
-        */
     ],
-    'params' => $params,
+    'params'     => $params,
+    'container'  => [
+        'definitions' => $di,
+    ],
 ];
 
 if (YII_ENV_DEV) {
     // configuration adjustments for 'dev' environment
-    $config['bootstrap'][] = 'debug';
+    $config['bootstrap'][]      = 'debug';
     $config['modules']['debug'] = [
-        'class' => 'yii\debug\Module',
+        'class'      => 'yii\debug\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
+        'allowedIPs' => ['*', '::1'],
     ];
 
-    $config['bootstrap'][] = 'gii';
+    $config['bootstrap'][]    = 'gii';
     $config['modules']['gii'] = [
-        'class' => 'yii\gii\Module',
+        'class'      => 'yii\gii\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
+        'allowedIPs' => ['*', '::1'],
     ];
 }
 
