@@ -1,34 +1,19 @@
 <?php
 
-use app\components\ErrorHandler;
+declare(strict_types=1);
+
+use app\components\error_handlers\ErrorHandler;
 
 $params = require __DIR__ . '/params.php';
 $db     = require __DIR__ . '/test_db.php';
 $di     = require __DIR__ . '/di.php';
 
-/**
- * Application configuration shared by all test types
- */
 return [
-    'id' => 'basic-tests',
-    'basePath' => dirname(__DIR__),
-    'aliases' => [
-        '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
-    ],
-    'language' => 'en-US',
+    'id'         => 'basic-tests',
+    'basePath'   => dirname(__DIR__),
+    'language'   => 'en-US',
     'components' => [
-        'db' => $db,
-        'mailer' => [
-            'class' => \yii\symfonymailer\Mailer::class,
-            'viewPath' => '@app/mail',
-            // send all mails to a file by default.
-            'useFileTransport' => true,
-            'messageClass' => 'yii\symfonymailer\Message'
-        ],
-        'assetManager' => [
-            'basePath' => __DIR__ . '/../web/assets',
-        ],
+        'db'           => $db,
         'errorHandler' => [
             'class' => ErrorHandler::class,
         ],
@@ -36,15 +21,15 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName'  => false,
             'rules'           => [
-                ['class' => 'yii\rest\UrlRule', 'controller' => 'notifications'],
+                ['class' => yii\rest\UrlRule::class, 'controller' => 'notifications'],
             ],
         ],
-        'request' => [
-            'cookieValidationKey' => 'test',
+        'request'      => [
+            'cookieValidationKey'  => 'test',
             'enableCsrfValidation' => false,
         ],
     ],
-    'params' => $params,
+    'params'     => $params,
     'container'  => [
         'definitions' => $di,
     ],

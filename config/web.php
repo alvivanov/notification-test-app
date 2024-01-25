@@ -1,7 +1,11 @@
 <?php
 
-use app\components\ErrorHandler;
-use yii\base\Event;
+declare(strict_types=1);
+
+use app\components\error_handlers\ErrorHandler;
+use yii\caching\FileCache;
+use yii\rest\UrlRule;
+use yii\web\JsonParser;
 
 $params = require __DIR__ . '/params.php';
 $db     = require __DIR__ . '/db.php';
@@ -11,35 +15,25 @@ $config = [
     'id'         => 'basic',
     'basePath'   => dirname(__DIR__),
     'bootstrap'  => ['log'],
-    'aliases'    => [
-        '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
-    ],
     'components' => [
         'request'      => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'wjOslpmpe12YG6eDGcTrDiNgDKCwAJS6',
             'parsers'             => [
-                'application/json' => 'yii\web\JsonParser',
+                'application/json' => JsonParser::class,
             ],
         ],
         'cache'        => [
-            'class' => 'yii\caching\FileCache',
+            'class' => FileCache::class,
         ],
         'errorHandler' => [
             'class' => ErrorHandler::class,
-        ],
-        'mailer'       => [
-            'class'            => \yii\symfonymailer\Mailer::class,
-            'viewPath'         => '@app/mail',
-            // send all mails to a file by default.
-            'useFileTransport' => true,
         ],
         'log'          => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets'    => [
                 [
-                    'class'  => 'yii\log\FileTarget',
+                    'class'  => yii\log\FileTarget::class,
                     'levels' => ['error', 'warning'],
                 ],
             ],
@@ -49,7 +43,7 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName'  => false,
             'rules'           => [
-                ['class' => 'yii\rest\UrlRule', 'controller' => 'notifications'],
+                ['class' => UrlRule::class, 'controller' => 'notifications'],
             ],
         ],
     ],
@@ -60,18 +54,14 @@ $config = [
 ];
 
 if (YII_ENV_DEV) {
-    // configuration adjustments for 'dev' environment
-    $config['bootstrap'][]      = 'debug';
-    $config['modules']['debug'] = [
-        'class'      => 'yii\debug\Module',
-        // uncomment the following to add your IP if you are not connecting from localhost.
+    $config['bootstrap'][]      = 'gii';
+    $config['modules']['gii']   = [
+        'class'      => \yii\gii\Module::class,
         'allowedIPs' => ['*', '::1'],
     ];
-
-    $config['bootstrap'][]    = 'gii';
-    $config['modules']['gii'] = [
-        'class'      => 'yii\gii\Module',
-        // uncomment the following to add your IP if you are not connecting from localhost.
+    $config['bootstrap'][]      = 'debug';
+    $config['modules']['debug'] = [
+        'class'      => \yii\debug\Module::class,
         'allowedIPs' => ['*', '::1'],
     ];
 }

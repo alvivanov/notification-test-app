@@ -8,9 +8,9 @@
 
 1) Скопировать .env.example в .env
 2) В `.env` можно настроить под себя параметры проекта, если указанные порты или ip пересекаются с существующими
-3) По умолчанию включен xdebug, настроенный под работу на Mac OS. Для работы на Linux надо указать в docker/.env `XDEBUG_CLIENT_HOST={{ ip в локальной сети }}`. Если xdebug не нужен, то в docker/.env указать `XDEBUG=false`
-4) Выполнить `docker compose up -d`
-5) После старта всех контейнеров выполнить миграции: `docker compose exec app ./yii migrate --interactive=0`
+3) Выполнить `docker compose up -d`
+4) После старта всех контейнеров выполнить миграции основной БД: `docker compose exec app ./yii migrate --interactive=0`
+5) После старта всех контейнеров выполнить миграции тестовой БД: `docker compose exec app tests/bin/yii migrate --interactive=0`
 
 Проект по-умолчанию доступен по ссылке [http://127.0.0.1:8700](http://127.0.0.1:8700).
 
@@ -23,3 +23,21 @@
 ### Установка пакетов composer
 `docker compose exec composer require {{ package }}`
 
+## Функционал
+
+### Команда для рассылки уведомлений
+`./yii notifications/send-pending`
+
+### REST-API уведомлений
+- `POST /notifications`
+- `GET /notifications`
+- `GET /notifications/<id>`
+- `PUT /notifications/<id>`
+- `DELETE /notifications/<id>`
+
+Для создания и обновления уведомления необходимо указать сообщение и интегратор:
+
+`{
+    "content": string,
+    "channel": ["sms"|"telegram"]
+}`

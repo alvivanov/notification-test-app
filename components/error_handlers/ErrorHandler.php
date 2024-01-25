@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace app\components;
+namespace app\components\error_handlers;
 
 use app\components\exceptions\ModelValidationException;
 use yii\base\ErrorHandler as BaseErrorHandler;

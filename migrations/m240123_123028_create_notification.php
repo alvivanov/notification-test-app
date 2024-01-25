@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 use yii\db\Migration;
 
-final class m240123_123028_create_notifications extends Migration
+final class m240123_123028_create_notification extends Migration
 {
     public function up(): void
     {
-        $this->createTable('notifications', [
+        $this->createTable('notification', [
             'id' => $this->primaryKey(),
             'content' => $this->string(1_000)->notNull(),
             'channel' => $this->string(50)->notNull(),
@@ -20,6 +20,6 @@ final class m240123_123028_create_notifications extends Migration
 
     public function down(): void
     {
-        $this->dropTable('notifications');
+        $this->dropTable('notification');
     }
 }

@@ -1,6 +1,6 @@
-map $server_port $envFile {
-    default ".env";
-    ${TEST_NGINX_PORT} ".env.test";
+map $server_port $env {
+    default "dev";
+    ${TEST_NGINX_PORT} "test";
 }
 
 server {
@@ -29,7 +29,7 @@ server {
     location ~ \.php$ {
         include fastcgi.conf;
         fastcgi_pass ${NGINX_FAST_CGI_PASS};
-        fastcgi_param DOTENV_FILE $envFile;
+        fastcgi_param YII_ENV $env;
         include fastcgi_params;
     }
 

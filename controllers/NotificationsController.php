@@ -16,7 +16,7 @@ use yii\web\Response;
 
 final class NotificationsController extends Controller
 {
-    public $serializer = ['class' => Serializer::class];
+    public $serializer = Serializer::class;
 
     public function __construct(
         $id,

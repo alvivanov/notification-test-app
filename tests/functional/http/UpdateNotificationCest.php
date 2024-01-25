@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 use app\models\Notification\Notification;
+use app\tests\fixtures\NotificationFixture;
 use Codeception\Attribute\DataProvider;
 use Codeception\Attribute\Examples;
 use Codeception\Example;
-use app\tests\fixtures\NotificationFixture;
 
 class UpdateNotificationCest
 {

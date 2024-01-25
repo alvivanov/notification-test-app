@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 use app\services\NotificationManager\NotificationManager;
+use app\services\NotificationManager\NotificationManagerInterface;
 use app\services\NotificationSender\NotificationSender;
 use app\services\NotificationSender\NotificationSenderInterface;
 use app\services\NotificationSender\SendingStrategies\SmsSendingStrategy;
 use app\services\NotificationSender\SendingStrategies\TelegramSendingStrategy;
-use app\services\NotificationManager\NotificationManagerInterface;
 use yii\di\Container;
 
 return [

@@ -1,59 +1,52 @@
 <?php
 
+declare(strict_types=1);
+
+use yii\caching\FileCache;
+use yii\log\FileTarget;
+
 $params = require __DIR__ . '/params.php';
-$db = require __DIR__ . '/db.php';
-$di = require __DIR__ . '/di.php';
+$db     = require __DIR__ . '/db.php';
+$di     = require __DIR__ . '/di.php';
 
 $config = [
-    'id' => 'basic-console',
-    'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'id'                  => 'basic-console',
+    'basePath'            => dirname(__DIR__),
+    'bootstrap'           => ['log'],
     'controllerNamespace' => 'app\commands',
-    'aliases' => [
+    'aliases'             => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
         '@tests' => '@app/tests',
     ],
-    'components' => [
+    'components'          => [
         'cache' => [
-            'class' => 'yii\caching\FileCache',
+            'class' => FileCache::class,
         ],
-        'log' => [
+        'log'   => [
             'targets' => [
                 [
-                    'class' => 'yii\log\FileTarget',
+                    'class'  => FileTarget::class,
                     'levels' => ['error', 'warning'],
                 ],
             ],
         ],
-        'db' => $db,
+        'db'    => $db,
     ],
-    'params' => $params,
-    'container' => [
-        'definitions' => $di
-    ]
-    /*
-    'controllerMap' => [
-        'fixture' => [ // Fixture generation command line.
-            'class' => 'yii\faker\FixtureController',
-        ],
+    'params'              => $params,
+    'container'           => [
+        'definitions' => $di,
     ],
-    */
 ];
 
 if (YII_ENV_DEV) {
-    // configuration adjustments for 'dev' environment
-    $config['bootstrap'][] = 'gii';
-    $config['modules']['gii'] = [
-        'class' => 'yii\gii\Module',
+    $config['bootstrap'][]      = 'gii';
+    $config['modules']['gii']   = [
+        'class' => \yii\gii\Module::class,
     ];
-    // configuration adjustments for 'dev' environment
-    // requires version `2.1.21` of yii2-debug module
-    $config['bootstrap'][] = 'debug';
+    $config['bootstrap'][]      = 'debug';
     $config['modules']['debug'] = [
-        'class' => 'yii\debug\Module',
-        // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
+        'class' => \yii\debug\Module::class,
     ];
 }
 

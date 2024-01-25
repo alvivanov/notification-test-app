@@ -8,7 +8,7 @@ use PhpCsFixer\Finder;
 $finder = (new Finder())
     ->ignoreDotFiles(false)
     ->ignoreVCSIgnored(true)
-    ->exclude(['vendor', 'runtume', 'config'])
+    ->exclude(['vendor', 'runtume'])
     ->in(__DIR__)
 ;
 
